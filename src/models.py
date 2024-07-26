@@ -9,8 +9,6 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     first_name = Column(String(80), nullable=False)
     last_name = Column(String(80), nullable=False)
@@ -19,47 +17,39 @@ class User(Base):
 
     favorites = relationship('Favorite', back_populates='user')
 
-class Characters(Base):
-    __tablename__ = 'Characters'
-    
+class Character(Base):
+    __tablename__ = 'character'
     id = Column(Integer, primary_key=True)
     name = Column(String(150), nullable=False)
     height = Column(String(150))
-    Mass = Column(String(150))
-    Hair_Color = Column(String(150))
-    Skin_Color = Column(String(150))
-    Birth_Year = Column(String(150))
-    Gende = Column(String(150))
-     
-    favorites = relationship('Favorite', back_populates='characters')
+    mass = Column(String(150))
+    hair_color = Column(String(150))
+    skin_color = Column(String(150))
+    birth_year = Column(String(150))
+    gender = Column(String(150))
+    
+    favorites = relationship('Favorite', back_populates='character')
 
 class Planet(Base):
     __tablename__ = 'planet'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    full_name = Column(String(80), nullable=False)
-    Climate = Column(String(80) )
-    Terrain = Column(String(120) )
-    Population = Column(String(80))
+    name = Column(String(80), nullable=False)
+    climate = Column(String(80))
+    terrain = Column(String(120))
+    population = Column(String(80))
 
     favorites = relationship('Favorite', back_populates='planet')
-    
-class Favorites(Base):
-  __tablename__ = 'favorites'
-    # # Here we define columns for the table person
-    # # Notice that each column is also a normal Python instance attribute.
-  id = Column(Integer, primary_key=True)
-  user_id = Column(Integer,ForeignKey('user.id'), nullable=False)
-  characters_id = Column(Integer,ForeignKey('characters.id'), nullable=True )
-  planet_id = Column(Integer,ForeignKey('planet.id'), nullable=True )
+
+class Favorite(Base):
+    __tablename__ = 'favorite'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    character_id = Column(Integer, ForeignKey('character.id'), nullable=True)
+    planet_id = Column(Integer, ForeignKey('planet.id'), nullable=True)
         
-  user =relationship('user', back_populates= 'favorites')
-  characters =relationship('characters', back_populates= 'favorites')
-  planet =relationship('planet', back_populates= 'favorites')
+    user = relationship('User', back_populates='favorites')
+    character = relationship('Character', back_populates='favorites')
+    planet = relationship('Planet', back_populates='favorites')
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
-
-#     # Here we define columns for the table address.
-#     # Notice that each column is also a normal Python instance attribute.
